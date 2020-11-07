@@ -1,8 +1,10 @@
 import telebot
 import user
 import selector
+import messenger
+import os
 
-bot = telebot.TeleBot(open('./credits/tg-api-key', 'r').read())
+bot = telebot.TeleBot(os.environ.get('TELEGRAMAPI'))
 
 keyboards = {
     'main_menu': telebot.types.ReplyKeyboardMarkup(resize_keyboard=True)
@@ -86,11 +88,14 @@ def answer(message):
     elif message.text == 'How to combine tags':
         bot.send_message(message.chat.id, 'You may combine tags into compound statements in the following way:'
                                           '\n\n'
-                                          '1\. If you want the problems I find to include either one tag or another, you '
+                                          '1\. If you want the problems I find to include either one tag or another, '
+                                          'you '
                                           'have to separate these tags with comma'
                                           '\n\nFor example:``` math, dp```\n\n'
-                                          '2\. If you want the problems I find to include both tags, you have to combine '
-                                          'them with plus sign\n\nFor example: ``` math + implementation```\n\n3\. Make '
+                                          '2\. If you want the problems I find to include both tags, you have to '
+                                          'combine '
+                                          'them with plus sign\n\nFor example: ``` math + implementation```\n\n3\. '
+                                          'Make '
                                           'compound '
                                           'statements to select problem you want'
                                           '\n\n``` math + dp, implementation + dp, graphs + dp, bruteforce```',
@@ -177,10 +182,9 @@ def answer(message):
             for x in problems.values():
                 if 'contestId' not in x:
                     continue
-                new_txt = "https://codeforces.com/problemset/problem/" + str(x['contestId']) + '/' + str(x['index']) \
-                          + '\n'
+                new_txt = messenger.problem_info(x)
                 if len(txt) + len(new_txt) > 4096:
-                    bot.send_message(message.chat.id, txt)
+                    bot.send_message(message.chat.id, txt, parse_mode='Markdown', disable_web_page_preview=True)
                     txt = ''
                 txt += new_txt
             return_to_main(uid, message.chat.id, txt)
@@ -201,9 +205,11 @@ def throw_error_tou(uid, chat):
 def return_to_main(uid, chat, message):
     if len(message) > 4096:
         for x in range(0, len(message), 4096):
-            bot.send_message(chat, message[x:x + 4096], reply_markup=keyboards['main_menu'])
+            bot.send_message(chat, message[x:x + 4096], reply_markup=keyboards['main_menu'], parse_mode='Markdown',
+                             disable_web_page_preview=True)
     else:
-        bot.send_message(chat, message, reply_markup=keyboards['main_menu'])
+        bot.send_message(chat, message, reply_markup=keyboards['main_menu'], parse_mode='Markdown',
+                         disable_web_page_preview=True)
     user.update_dialog(uid, user.UserDialog.NO_DIALOG)
     user.clear_cache(uid)
 
