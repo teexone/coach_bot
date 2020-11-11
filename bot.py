@@ -4,7 +4,7 @@ import selector
 import messenger
 import os
 
-bot = telebot.TeleBot(os.environ.get('TELEGRAMAPI'))
+
 
 keyboards = {
     'main_menu': telebot.types.ReplyKeyboardMarkup(resize_keyboard=True)
