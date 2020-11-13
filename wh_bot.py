@@ -16,9 +16,8 @@ app = Flask(__name__)
 @app.route('/{}'.format(bot_token), methods=['POST'])
 def respond():
     update = Update.de_json(request.get_json(force=True), bot)
-    chat = update.message.chat.id
     message = update.message
-    bot.send_message(chat, 'Working')
+    answer(message)
     return 'ok'
 
 
@@ -59,22 +58,8 @@ keyboards = {
             [telegram.KeyboardButton('Help')]
     ], resize_keyboard=True),
 }
+
 user.init_load()
-
-
-@bot.message_handler(commands=['start'])
-def on_start(message):
-    bot.send_message(message.chat.id,
-                     'Hello. I am a coach bot for competitive programming. I can help you in selecting the problems to '
-                     'solve. Also I may track your results and show your progress on a specific classes of problems'
-                     '\n\n'
-                     'You may use options provided below. If you need some help press "Help".',
-                     reply_markup=keyboards['main_menu'])
-
-
-def on_update(messages):
-    for msg in messages:
-        answer(msg)
 
 
 def answer(message):
@@ -83,6 +68,13 @@ def answer(message):
     if message.text == 'Cancel':
         return_to_main(uid, message.chat.id, 'Canceled')
         return
+    elif message.text == '/start':
+        bot.send_message(message.chat.id,
+                         'Hello. I am a coach bot for competitive programming. I can help you in selecting the problems to '
+                         'solve. Also I may track your results and show your progress on a specific classes of problems'
+                         '\n\n'
+                         'You may use options provided below. If you need some help press "Help".',
+                         reply_markup=keyboards['main_menu'])
     elif message.text == 'Help':
         bot.send_message(message.chat.id, 'You may use '
                                           'buttons below this message to get useful information',
@@ -237,6 +229,7 @@ def answer(message):
             return
         user.change_handle(uid, txt[0])
         return_to_main(uid, message.chat.id, 'Your handle has been successfully attached')
+
 
 
 def throw_error_tou(uid, chat):
