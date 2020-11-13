@@ -13,34 +13,6 @@ bot = Bot(bot_token)
 app = Flask(__name__)
 
 
-@app.route('/{}'.format(bot_token), methods=['POST'])
-def respond():
-    update = Update.de_json(request.get_json(force=True), bot)
-    message = update.message
-    answer(message)
-    return 'ok'
-
-
-@app.route('/setwebhook', methods=['GET', 'POST'])
-def hook():
-    _set = bot.setWebhook('{URL}{HOOK}'.format(URL=heroku_url, HOOK=bot_token))
-    if _set:
-        print("Webhook has been established")
-    else:
-        print("Webhook establishment failed")
-    return 'ok'
-
-
-@app.route('/')
-def index():
-    return '<a href="http://github.com/teexone">Github Link</a>'
-
-
-if __name__ == '__main__':
-    port = int(os.environ.get('PORT', 5000))
-    app.run(host='0.0.0.0', threaded=True, port=port)
-
-
 keyboards = {
     'main_menu': telegram.ReplyKeyboardMarkup([
             [telegram.KeyboardButton('Problem'), telegram.KeyboardButton('Configure handle')],
@@ -253,4 +225,33 @@ def get_problem(uid):
     cache = data['cache']
     return selector.fetch_problems(cache['quantity'], (cache['lower_bound'], cache['upper_bound']), cache['tags'],
                                    data['handle'] if cache['exclude_solved'] else None)
+
+
+
+@app.route('/{}'.format(bot_token), methods=['POST'])
+def respond():
+    update = Update.de_json(request.get_json(force=True), bot)
+    message = update.message
+    answer(message)
+    return 'ok'
+
+
+@app.route('/setwebhook', methods=['GET', 'POST'])
+def hook():
+    _set = bot.setWebhook('{URL}{HOOK}'.format(URL=heroku_url, HOOK=bot_token))
+    if _set:
+        print("Webhook has been established")
+    else:
+        print("Webhook establishment failed")
+    return 'ok'
+
+
+@app.route('/')
+def index():
+    return '<a href="http://github.com/teexone">Github Link</a>'
+
+
+if __name__ == '__main__':
+    port = int(os.environ.get('PORT', 5000))
+    app.run(host='0.0.0.0', threaded=True, port=port)
 
