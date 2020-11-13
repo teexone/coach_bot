@@ -27,7 +27,7 @@ keyboards = {
     ], resize_keyboard=True),
     'help': telegram.ReplyKeyboardMarkup([
             [telegram.KeyboardButton('Tag list'), telegram.KeyboardButton('How to combine tags')],
-            [telegram.KeyboardButton('Help')]
+            [telegram.KeyboardButton('Cancel')]
     ], resize_keyboard=True),
 }
 
