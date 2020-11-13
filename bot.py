@@ -188,7 +188,6 @@ def answer(message):
                     txt = ''
                 txt += new_txt
             return_to_main(uid, message.chat.id, txt)
-
     elif user_state['dialog'] == user.UserDialog.CONFIGURE_HANDLE:
         txt = message.text.strip().split()
         if len(txt) > 1:
@@ -221,5 +220,3 @@ def get_problem(uid):
                                    data['handle'] if cache['exclude_solved'] else None)
 
 
-bot.set_update_listener(on_update)
-bot.polling()
