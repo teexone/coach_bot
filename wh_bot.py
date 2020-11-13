@@ -26,7 +26,7 @@ def hook():
         print("Webhook establishment failed")
 
 
-@app.route('/')
+@app.route('/', methods=['GET'])
 def index():
     return '<a href="http://github.com/teexone">Github Link</a>'
 
