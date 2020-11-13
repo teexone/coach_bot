@@ -24,7 +24,7 @@ def hook():
         print("Webhook has been established")
     else:
         print("Webhook establishment failed")
-
+    return 'ok'
 
 @app.route('/')
 def index():
@@ -33,4 +33,4 @@ def index():
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
-    app.run(host='0.0.0.0', threaded=True, port=port)
+    app.run(threaded=True, port=port)
