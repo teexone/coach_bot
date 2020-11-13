@@ -26,10 +26,11 @@ def hook():
         print("Webhook establishment failed")
 
 
-@app.route('/', methods=['GET'])
+@app.route('/')
 def index():
     return '<a href="http://github.com/teexone">Github Link</a>'
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0')
+    port = int(os.environ.get('PORT', 5000))
+    app.run(host='0.0.0.0', threaded=True, port=port)

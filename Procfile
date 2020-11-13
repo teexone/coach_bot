@@ -1,1 +1,1 @@
-web: python3 wh_bot.py
+web: gunicorn wh_bot.py --bind 0.0.0.0:${PORT} wsgi
