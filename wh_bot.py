@@ -203,7 +203,6 @@ def answer(message):
         return_to_main(uid, message.chat.id, 'Your handle has been successfully attached')
 
 
-
 def throw_error_tou(uid, chat):
     return_to_main(uid, chat, 'It seems the data you have provided is invalid')
 
@@ -225,7 +224,6 @@ def get_problem(uid):
     cache = data['cache']
     return selector.fetch_problems(cache['quantity'], (cache['lower_bound'], cache['upper_bound']), cache['tags'],
                                    data['handle'] if cache['exclude_solved'] else None)
-
 
 
 @app.route('/{}'.format(bot_token), methods=['POST'])
